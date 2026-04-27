@@ -11,7 +11,7 @@
     --border-color: #334155; /* Slate 700 */
     --wall-color: #ffffff;
     --maze-bg: #0f172a;
-    --path-color: rgba(239, 68, 68, 0.4); /* Red with opacity for stack history */
+    --path-color: #ef4444; /* Red 500 */
     --deadend-color: #3b82f6; /* Blue 500 */
 }
 

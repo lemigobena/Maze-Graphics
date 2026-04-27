@@ -500,7 +500,7 @@ function drawSolverState(path) {
                 drawDot(r, c, 'rgba(59, 130, 246, 0.5)'); // blue
             } else if (visited[r][c] === 1) {
                 // draw faintly to show exploration in wall follower
-                drawDot(r, c, 'rgba(255, 255, 255, 0.1)'); 
+                drawDot(r, c, 'rgba(239, 68, 68, 0.3)');
             }
         }
     }
