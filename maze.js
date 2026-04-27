@@ -151,11 +151,14 @@ async function generateMaze() {
         }
     }
 
-    startCell = { r: Math.floor(Math.random() * R), c: 0 };
-    endCell = { r: Math.floor(Math.random() * R), c: C - 1 };
+    // Place start and end cells randomly in the interior of the maze
+    startCell = { r: Math.floor(Math.random() * R), c: Math.floor(Math.random() * C) };
+    endCell = { r: Math.floor(Math.random() * R), c: Math.floor(Math.random() * C) };
     
-    eastWall[startCell.r][0] = 0;
-    eastWall[endCell.r][C] = 0;
+    // Ensure they are not the exact same cell
+    while (startCell.r === endCell.r && startCell.c === endCell.c) {
+        endCell = { r: Math.floor(Math.random() * R), c: Math.floor(Math.random() * C) };
+    }
 
     drawMaze();
     drawMouse(startCell.r, startCell.c, '#10b981'); 
