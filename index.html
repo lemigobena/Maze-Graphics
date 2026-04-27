@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Generator & Solver</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Maze Generator & Solver</h1>
+            <p>A visualization of maze generation via Randomized DFS and solving via Backtracking.</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="rows">Rows:</label>
+                <input type="number" id="rows" value="20" min="5" max="50">
+            </div>
+            <div class="control-group">
+                <label for="cols">Columns:</label>
+                <input type="number" id="cols" value="20" min="5" max="50">
+            </div>
+            <div class="control-group checkbox-group">
+                <input type="checkbox" id="challenge-mode">
+                <label for="challenge-mode">Enable Challenge Mode (Cycles)</label>
+            </div>
+            <div class="button-group">
+                <button id="btn-generate" class="primary">Generate Maze</button>
+                <button id="btn-solve" class="secondary" disabled>Solve Maze</button>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="maze-canvas" width="600" height="600"></canvas>
+        </div>
+        
+        <div class="status" id="status-text">Ready</div>
+    </div>
+
+    <script src="maze.js"></script>
+</body>
+</html>
