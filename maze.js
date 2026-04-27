@@ -15,10 +15,15 @@ let cellSize = 0;
 let xOffset = 0;
 let yOffset = 0;
 
-// Data Structures
 let northWall = [];
 let eastWall = [];
 let visited = [];
+
+let startCell = null;
+let endCell = null;
+
+let isAnimating = false;
+let animationDelay = 10; // ms
 
 function initMaze() {
     R = parseInt(rowsInput.value);
@@ -69,4 +74,98 @@ function drawMaze() {
     }
 }
 
+function getUnvisitedNeighbors(r, c) {
+    const neighbors = [];
+    if (r > 0 && visited[r - 1][c] === 0) neighbors.push({ r: r - 1, c: c, dir: 'N' });
+    if (r < R - 1 && visited[r + 1][c] === 0) neighbors.push({ r: r + 1, c: c, dir: 'S' });
+    if (c > 0 && visited[r][c - 1] === 0) neighbors.push({ r: r, c: c - 1, dir: 'W' });
+    if (c < C - 1 && visited[r][c + 1] === 0) neighbors.push({ r: r, c: c + 1, dir: 'E' });
+    return neighbors;
+}
+
+function removeWall(r, c, dir) {
+    if (dir === 'N') northWall[r][c] = 0;
+    if (dir === 'S') northWall[r + 1][c] = 0;
+    if (dir === 'W') eastWall[r][c] = 0;
+    if (dir === 'E') eastWall[r][c + 1] = 0;
+}
+
+function drawMouse(r, c, color = '#eab308') {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(
+        xOffset + c * cellSize + cellSize / 2, 
+        yOffset + r * cellSize + cellSize / 2, 
+        cellSize * 0.3, 
+        0, 
+        Math.PI * 2
+    );
+    ctx.fill();
+}
+
+async function generateMaze() {
+    if (isAnimating) return;
+    isAnimating = true;
+    btnGenerate.disabled = true;
+    btnSolve.disabled = true;
+    statusText.textContent = "Generating maze...";
+
+    initMaze();
+    const challengeMode = challengeModeInput.checked;
+
+    let currR = Math.floor(Math.random() * R);
+    let currC = Math.floor(Math.random() * C);
+    
+    visited[currR][currC] = 1;
+    const stack = [{ r: currR, c: currC }];
+
+    while (stack.length > 0) {
+        let current = stack[stack.length - 1];
+        currR = current.r;
+        currC = current.c;
+
+        drawMaze();
+        drawMouse(currR, currC);
+        
+        await new Promise(resolve => setTimeout(resolve, animationDelay));
+
+        const neighbors = getUnvisitedNeighbors(currR, currC);
+
+        if (neighbors.length > 0) {
+            const next = neighbors[Math.floor(Math.random() * neighbors.length)];
+            removeWall(currR, currC, next.dir);
+            
+            visited[next.r][next.c] = 1;
+            stack.push({ r: next.r, c: next.c });
+
+            if (challengeMode && Math.random() < 0.05) {
+                const allDirs = ['N', 'S', 'E', 'W'];
+                const randDir = allDirs[Math.floor(Math.random() * allDirs.length)];
+                if (randDir === 'N' && currR > 0) removeWall(currR, currC, 'N');
+                if (randDir === 'S' && currR < R - 1) removeWall(currR, currC, 'S');
+                if (randDir === 'W' && currC > 0) removeWall(currR, currC, 'W');
+                if (randDir === 'E' && currC < C - 1) removeWall(currR, currC, 'E');
+            }
+        } else {
+            stack.pop();
+        }
+    }
+
+    startCell = { r: Math.floor(Math.random() * R), c: 0 };
+    endCell = { r: Math.floor(Math.random() * R), c: C - 1 };
+    
+    eastWall[startCell.r][0] = 0;
+    eastWall[endCell.r][C] = 0;
+
+    drawMaze();
+    drawMouse(startCell.r, startCell.c, '#10b981'); 
+    drawMouse(endCell.r, endCell.c, '#ef4444');
+
+    isAnimating = false;
+    btnGenerate.disabled = false;
+    btnSolve.disabled = false;
+    statusText.textContent = "Maze generated. Ready to solve!";
+}
+
+btnGenerate.addEventListener('click', generateMaze);
 initMaze();
