@@ -151,14 +151,9 @@ async function generateMaze() {
         }
     }
 
-    // Place start and end cells randomly in the interior of the maze
-    startCell = { r: Math.floor(Math.random() * R), c: Math.floor(Math.random() * C) };
-    endCell = { r: Math.floor(Math.random() * R), c: Math.floor(Math.random() * C) };
-    
-    // Ensure they are not the exact same cell
-    while (startCell.r === endCell.r && startCell.c === endCell.c) {
-        endCell = { r: Math.floor(Math.random() * R), c: Math.floor(Math.random() * C) };
-    }
+    // Set start at top-left and end at bottom-right
+    startCell = { r: 0, c: 0 };
+    endCell = { r: R - 1, c: C - 1 };
 
     drawMaze();
     drawMouse(startCell.r, startCell.c, '#10b981'); 
@@ -209,8 +204,8 @@ async function solveMaze() {
         drawMaze();
         for (let i = 0; i < R; i++) {
             for (let j = 0; j < C; j++) {
-                if (visited[i][j] !== 1) { // If not on the red path (stack)
-                    drawMouse(i, j, '#3b82f6'); // Blue dot
+                if (visited[i][j] === 2) {
+                    drawMouse(i, j, '#3b82f6');
                 }
             }
         }
@@ -236,8 +231,8 @@ async function solveMaze() {
     drawMaze();
     for (let i = 0; i < R; i++) {
         for (let j = 0; j < C; j++) {
-            if (visited[i][j] !== 1) { // If not on the red path (stack)
-                drawMouse(i, j, '#3b82f6'); // Blue dot
+            if (visited[i][j] === 2) {
+                drawMouse(i, j, '#3b82f6');
             }
         }
     }
