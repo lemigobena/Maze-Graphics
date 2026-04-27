@@ -11,33 +11,94 @@
     <div class="container">
         <header>
             <h1>Maze Generator & Solver</h1>
-            <p>A visualization of maze generation via Randomized DFS and solving via Backtracking.</p>
+            <p>A visualization of maze generation and solving algorithms.</p>
         </header>
 
-        <div class="controls">
-            <div class="control-group">
-                <label for="rows">Rows:</label>
-                <input type="number" id="rows" value="20" min="5" max="50">
-            </div>
-            <div class="control-group">
-                <label for="cols">Columns:</label>
-                <input type="number" id="cols" value="20" min="5" max="50">
-            </div>
-            <div class="control-group checkbox-group">
-                <input type="checkbox" id="challenge-mode">
-                <label for="challenge-mode">Enable Challenge Mode (Cycles)</label>
-            </div>
-            <div class="button-group">
-                <button id="btn-generate" class="primary">Generate Maze</button>
-                <button id="btn-solve" class="secondary" disabled>Solve Maze</button>
-            </div>
-        </div>
+        <div class="app-layout">
+            <div class="sidebar">
+                <div class="controls panel">
+                    <h2>Configuration</h2>
+                    
+                    <div class="control-group">
+                        <label for="rows">Rows:</label>
+                        <input type="number" id="rows" value="20" min="5" max="50">
+                    </div>
+                    <div class="control-group">
+                        <label for="cols">Columns:</label>
+                        <input type="number" id="cols" value="20" min="5" max="50">
+                    </div>
 
-        <div class="canvas-container">
-            <canvas id="maze-canvas" width="600" height="600"></canvas>
+                    <div class="control-group">
+                        <label for="gen-type">Generation Algorithm:</label>
+                        <select id="gen-type">
+                            <option value="dfs">DFS (Stack) - Tortuous</option>
+                            <option value="bfs">BFS (Queue) - Spreading</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="solver-type">Solver Algorithm:</label>
+                        <select id="solver-type">
+                            <option value="backtrack">Backtracking (Stack)</option>
+                            <option value="wall-follower">Shoulder-to-the-Wall</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group checkbox-group">
+                        <input type="checkbox" id="challenge-mode">
+                        <label for="challenge-mode">Challenge Mode (Cycles)</label>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="control-group">
+                        <label for="speed">Animation Delay (ms): <span id="speed-val">10</span></label>
+                        <input type="range" id="speed" min="0" max="500" value="10">
+                    </div>
+
+                    <div class="control-group checkbox-group">
+                        <input type="checkbox" id="step-mode">
+                        <label for="step-mode">Step-by-Step Mode</label>
+                    </div>
+
+                    <div class="button-group-vertical">
+                        <button id="btn-next-step" class="secondary" disabled>Next Step</button>
+                        <button id="btn-generate" class="primary">Generate Maze</button>
+                        <button id="btn-solve" class="primary" disabled>Solve Maze</button>
+                    </div>
+                </div>
+
+                <div class="stack-panel panel">
+                    <h2>Stack / Queue</h2>
+                    <div id="stack-container" class="stack-container">
+                        <!-- Items will go here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-view">
+                <div class="canvas-container">
+                    <canvas id="maze-canvas" width="600" height="600"></canvas>
+                </div>
+                
+                <div class="stats panel">
+                    <div class="stat-item">
+                        <span class="stat-label">Path Length</span>
+                        <span class="stat-value" id="stat-path">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Cells Visited</span>
+                        <span class="stat-value" id="stat-visited">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Backtracks / Turns</span>
+                        <span class="stat-value" id="stat-backtracks">0</span>
+                    </div>
+                </div>
+
+                <div class="status panel" id="status-text">Ready</div>
+            </div>
         </div>
-        
-        <div class="status" id="status-text">Ready</div>
     </div>
 
     <script src="maze.js"></script>

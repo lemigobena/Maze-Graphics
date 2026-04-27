@@ -1,6 +1,6 @@
 # Maze Generator and Solver
 
-This project fulfills the "Building and Running Mazes" Computer Graphics assignment. It demonstrates dynamic maze generation and solving visually directly in your web browser.
+This project fulfills the "Building and Running Mazes" Computer Graphics assignment with an extensive suite of visualization and UI enhancements. It demonstrates dynamic maze generation and solving visually directly in your web browser.
 
 ## Logic Overview
 
@@ -10,30 +10,32 @@ The maze walls are explicitly maintained using the requested approach:
 - `eastWall[r][c]`: Stores the integrity of the right/left walls.
 - Note: To easily handle the "phantom" bottom edge and the left-most edge gaps, arrays are extended to `[R+1][C]` and `[R][C+1]` respectively. `1` means intact, `0` means missing.
 
-### Generating the Maze (The "Mouse")
-The generation process starts with all walls intact (a grid). 
-- An invisible "mouse" is placed randomly.
-- It uses a **Randomized Depth-First Search (DFS)** with a Stack.
-- At each step, it checks for unvisited neighbors, picks one randomly, "eats" the connecting wall, marks it as visited, and pushes the new cell to the stack.
-- When it hits a dead-end, it pops the stack to backtrack.
-- The entire process is animated so you can watch the maze dynamically form!
+### Generation Algorithms
+You can toggle between two generation styles:
+1. **DFS (Stack) - Tortuous Paths**: The default assignment logic. An invisible mouse uses a Randomized Depth-First Search with a Stack to "eat" walls. It creates long, winding, and tortuous paths.
+2. **BFS (Queue) - Spreading**: An easter-egg mode using a Queue instead of a Stack, resulting in a maze that visually expands evenly outwards from the center like water spreading.
 
-### Running the Maze (Backtracking)
-To solve the maze, the program utilizes the **backtracking** algorithm:
-- The pathfinding mouse starts at the beginning and places its current path on a stack.
-- It moves randomly into available adjacent cells (no wall blocking it).
-- As it moves, it marks its current path with a **red dot**.
-- When it reaches a dead-end, it changes the cell color to **blue** to avoid visiting it again, and pops the stack to step backwards.
-- This continues until the end is found.
+### Solving Algorithms
+You can toggle between two solvers:
+1. **Backtracking (Stack)**: The standard solver. Moves randomly and leaves a red trail. When hitting a dead end, it turns blue and backtracks by popping the stack.
+2. **Shoulder-to-the-Wall**: The Addendum solver. This mouse uses the right-hand rule, attempting to turn right, go straight, turn left, or turn around at every junction.
 
 ### The Challenge: Cycles
-You can toggle the **"Enable Challenge Mode (Cycles)"** checkbox. When enabled, the mouse will randomly eat an extra wall (about 1 in 20 times) during generation.
-This creates "cycles" in the maze, meaning it is no longer a strict tree and there are multiple paths to some cells. 
-*Why does this matter?* Because a cycle that encircles the ending point will successfully defeat the classic "shoulder-to-the-wall" rule!
+You can toggle the **"Challenge Mode (Cycles)"** checkbox. When enabled, the mouse will randomly eat an extra wall (about 1 in 20 times) during generation.
+This creates "cycles" in the maze. A cycle that encircles the ending point will successfully defeat the "Shoulder-to-the-wall" solver, trapping it in an infinite loop!
+
+## UI Features
+
+- **Interactive Emojis**: The start and end points are represented by 🐁 and 🧀! You can **click anywhere on the canvas** after the maze generates to set custom starting and ending points.
+- **Variable Speed**: Use the slider to slow down or speed up the animations.
+- **Step-by-Step Mode**: Check the step-by-step box to pause the algorithm completely. Click "Next Step" to manually trace through the code's logic.
+- **Stats Dashboard**: Tracks the length of the current path, total cells visited, and the number of backtracks/turn-arounds made.
+- **Real-time Stack Visualizer**: Watch the literal algorithm data structure (Stack or Queue) push and pop cells in real-time as the generation and solving occur.
 
 ## How to Run
 Simply open `index.html` in any modern web browser. No complex compilation required.
 1. Enter your desired Row and Column sizes.
-2. Check the Challenge Mode box if desired.
-3. Click **Generate Maze** and watch the mouse carve out the paths.
-4. Click **Solve Maze** to watch it backtrack and find the end!
+2. Select your algorithms and speed.
+3. Click **Generate Maze**.
+4. (Optional) Click on the canvas to move the 🐁 and 🧀.
+5. Click **Solve Maze** to watch it go!
