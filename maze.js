@@ -89,8 +89,8 @@ canvas.addEventListener('click', (e) => {
     }
 
     drawMaze();
-    if (startCell) drawEmoji(startCell.r, startCell.c, '🐁');
-    if (endCell) drawEmoji(endCell.r, endCell.c, '🧀');
+    if (startCell) drawDot(startCell.r, startCell.c, '#10b981');
+    if (endCell) drawDot(endCell.r, endCell.c, '#10b981');
     
     btnSolve.disabled = !(startCell && endCell);
 });
@@ -296,8 +296,8 @@ async function generateMaze() {
     endCell = { r: R - 1, c: C - 1 };
 
     drawMaze();
-    drawEmoji(startCell.r, startCell.c, '🐁');
-    drawEmoji(endCell.r, endCell.c, '🧀');
+    drawDot(startCell.r, startCell.c, '#10b981');
+    drawDot(endCell.r, endCell.c, '#10b981');
 
     isAnimating = false;
     isGeneratedAndReady = true;
@@ -497,7 +497,7 @@ function drawSolverState(path) {
     for (let r = 0; r < R; r++) {
         for (let c = 0; c < C; c++) {
             if (visited[r][c] === 2) {
-                drawDot(r, c, 'rgba(59, 130, 246, 0.5)'); // blue
+                drawDot(r, c, '#3b82f6'); // solid blue
             } else if (visited[r][c] === 1) {
                 // draw faintly to show exploration in wall follower
                 drawDot(r, c, 'rgba(239, 68, 68, 0.3)');
@@ -510,13 +510,13 @@ function drawSolverState(path) {
         drawDot(path[i].r, path[i].c, 'var(--path-color)');
     }
 
-    // Draw cheese at end
-    drawEmoji(endCell.r, endCell.c, '🧀');
+    // Draw target at end
+    drawDot(endCell.r, endCell.c, '#10b981');
     
     // Draw mouse at current pos
     if (path.length > 0) {
         const last = path[path.length - 1];
-        drawEmoji(last.r, last.c, '🐁');
+        drawDot(last.r, last.c, '#ef4444');
     }
 }
 
