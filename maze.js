@@ -167,5 +167,88 @@ async function generateMaze() {
     statusText.textContent = "Maze generated. Ready to solve!";
 }
 
+function getValidMoves(r, c) {
+    const moves = [];
+    if (r > 0 && northWall[r][c] === 0) moves.push({ r: r - 1, c: c, dir: 'N' });
+    if (r < R - 1 && northWall[r + 1][c] === 0) moves.push({ r: r + 1, c: c, dir: 'S' });
+    if (c > 0 && eastWall[r][c] === 0) moves.push({ r: r, c: c - 1, dir: 'W' });
+    if (c < C - 1 && eastWall[r][c + 1] === 0) moves.push({ r: r, c: c + 1, dir: 'E' });
+    return moves;
+}
+
+async function solveMaze() {
+    if (isAnimating || !startCell || !endCell) return;
+    isAnimating = true;
+    btnGenerate.disabled = true;
+    btnSolve.disabled = true;
+    statusText.textContent = "Solving maze...";
+
+    visited = Array.from({ length: R }, () => Array(C).fill(0));
+    
+    const stack = [{ r: startCell.r, c: startCell.c }];
+    visited[startCell.r][startCell.c] = 1;
+    
+    let pathFound = false;
+
+    drawMaze();
+    drawMouse(endCell.r, endCell.c, '#10b981');
+
+    while (stack.length > 0) {
+        let current = stack[stack.length - 1];
+        let currR = current.r;
+        let currC = current.c;
+
+        if (currR === endCell.r && currC === endCell.c) {
+            pathFound = true;
+            break;
+        }
+
+        drawMaze();
+        for (let i = 0; i < R; i++) {
+            for (let j = 0; j < C; j++) {
+                if (visited[i][j] === 2) {
+                    drawMouse(i, j, '#3b82f6');
+                }
+            }
+        }
+        for (let i = 0; i < stack.length; i++) {
+            drawMouse(stack[i].r, stack[i].c, '#ef4444');
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, animationDelay * 2));
+
+        const moves = getValidMoves(currR, currC);
+        const unvisitedMoves = moves.filter(m => visited[m.r][m.c] === 0);
+
+        if (unvisitedMoves.length > 0) {
+            const next = unvisitedMoves[Math.floor(Math.random() * unvisitedMoves.length)];
+            visited[next.r][next.c] = 1;
+            stack.push({ r: next.r, c: next.c });
+        } else {
+            visited[currR][currC] = 2;
+            stack.pop();
+        }
+    }
+
+    drawMaze();
+    for (let i = 0; i < R; i++) {
+        for (let j = 0; j < C; j++) {
+            if (visited[i][j] === 2) {
+                drawMouse(i, j, '#3b82f6');
+            }
+        }
+    }
+    for (let i = 0; i < stack.length; i++) {
+        drawMouse(stack[i].r, stack[i].c, '#ef4444');
+    }
+
+    statusText.textContent = pathFound ? "Maze solved!" : "No path found.";
+    isAnimating = false;
+    btnGenerate.disabled = false;
+    btnSolve.disabled = false;
+}
+
 btnGenerate.addEventListener('click', generateMaze);
+btnSolve.addEventListener('click', solveMaze);
+
 initMaze();
