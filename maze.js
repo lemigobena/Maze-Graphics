@@ -209,8 +209,8 @@ async function solveMaze() {
         drawMaze();
         for (let i = 0; i < R; i++) {
             for (let j = 0; j < C; j++) {
-                if (visited[i][j] === 2) {
-                    drawMouse(i, j, '#3b82f6');
+                if (visited[i][j] !== 1) { // If not on the red path (stack)
+                    drawMouse(i, j, '#3b82f6'); // Blue dot
                 }
             }
         }
@@ -236,8 +236,8 @@ async function solveMaze() {
     drawMaze();
     for (let i = 0; i < R; i++) {
         for (let j = 0; j < C; j++) {
-            if (visited[i][j] === 2) {
-                drawMouse(i, j, '#3b82f6');
+            if (visited[i][j] !== 1) { // If not on the red path (stack)
+                drawMouse(i, j, '#3b82f6'); // Blue dot
             }
         }
     }
